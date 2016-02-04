@@ -1,5 +1,5 @@
 var express = require('express');
-var favicon = require('serve-favicon');
+//var favicon = require('serve-favicon');
 var proxy = require( 'http-proxy' ).createProxyServer({});
 var http = require('http');
 //var https = require('https');
