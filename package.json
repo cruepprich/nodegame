@@ -1,0 +1,36 @@
+{
+  "name": "nodegame",
+  "version": "1.0.0",
+  "description": "Math game to be played on APEX using node.js.",
+  "main": "game.js",
+  "dependencies": {
+    "express": "^4.13.4",
+    "http-proxy": "^1.13.1",
+    "onoff": "^1.0.4",
+    "socket.io": "^1.4.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "sudo node game"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cruepprich/nodegame.git"
+  },
+  "keywords": [
+    "raspberry",
+    "pi",
+    "apex",
+    "application",
+    "express",
+    "node",
+    "node.js",
+    "game"
+  ],
+  "author": "Christoph Ruepprich",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cruepprich/nodegame/issues"
+  },
+  "homepage": "https://github.com/cruepprich/nodegame#readme"
+}
