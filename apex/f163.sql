@@ -27,7 +27,7 @@ prompt APPLICATION 163 - Game
 -- Application Export:
 --   Application:     163
 --   Name:            Game
---   Date and Time:   10:10 Friday February 5, 2016
+--   Date and Time:   16:58 Sunday February 21, 2016
 --   Exported By:     ADMIN
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -37,12 +37,12 @@ prompt APPLICATION 163 - Game
 
 -- Application Statistics:
 --   Pages:                      5
---     Items:                   13
---     Computations:             3
+--     Items:                   12
+--     Computations:             4
 --     Processes:               16
 --     Regions:                  9
 --     Buttons:                 10
---     Dynamic Actions:          4
+--     Dynamic Actions:          6
 --   Shared Components:
 --     Logic:
 --       Items:                  1
@@ -109,7 +109,7 @@ wwv_flow_api.create_flow(
 ,p_rejoin_existing_sessions=>'N'
 ,p_csv_encoding=>'Y'
 ,p_last_updated_by=>'ADMIN'
-,p_last_upd_yyyymmddhh24miss=>'20160205093601'
+,p_last_upd_yyyymmddhh24miss=>'20160221164234'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_ui_type_name => null
 );
@@ -7623,24 +7623,13 @@ wwv_flow_api.create_page(
 ,p_javascript_code_onload=>wwv_flow_utilities.join(wwv_flow_t_varchar2(
 '//Evaluate RPi button press.',
 'socket.on(''button1'', function(state){',
-'',
+'                      ',
 '  if (state != ''RUNNING'') {',
 '    modalWindow();',
 '  } else {',
 '    $(''#modalRegion'').dialog(''close'');',
 '  }',
-'  ',
-'  console.log(''Got state'',state);',
-'  $s(''P2_GAME_STATE'',state);',
-'  //apex.server.process(''DUMMY'',{pageItems: ''#P2_GAME_STATE''},{dataType: "text"});',
-'  apex.server.process(''SET_GAME_STATE'', ',
-'                    {pageItems: ''#P2_GAME_STATE''}, ',
-'                    {success: function(pData){',
-'                                 console.log(''pData'',pData);',
-'                              }, ',
-'                     dataType: "text", ',
-'                     loadingIndicator: ''#P2_GAME_STATE''}',
-'                    );',
+'',
 '});'))
 ,p_inline_css=>wwv_flow_utilities.join(wwv_flow_t_varchar2(
 '.t-Region-header {',
@@ -7678,7 +7667,7 @@ wwv_flow_api.create_page(
 ,p_cache_mode=>'NOCACHE'
 ,p_help_text=>'No help is available for this page.'
 ,p_last_updated_by=>'ADMIN'
-,p_last_upd_yyyymmddhh24miss=>'20160205093601'
+,p_last_upd_yyyymmddhh24miss=>'20160221150100'
 );
 wwv_flow_api.create_report_region(
  p_id=>wwv_flow_api.id(4234095925667920)
@@ -8153,40 +8142,27 @@ wwv_flow_api.create_page(
 ,p_javascript_code=>'var socket = io.connect();'
 ,p_javascript_code_onload=>wwv_flow_utilities.join(wwv_flow_t_varchar2(
 '//Evaluate RPi button press.',
-'//Code for the Game controller',
-'//The game controller page sets the game status in the game table,',
-'//then emits a signal for the players to close/raise the pause dialog.',
 'socket.on(''button1'', function(state){',
-'  console.log(''Got state'',state);',
-'  $(''#messages li'').remove();',
-'  $(''#messages'').append($(''<li>'').text(state)); ',
-'  ',
-'  //Set game state in database, emit state',
+'                      ',
+'  console.log(''state'',state);',
+'    ',
 '  $s(''P3_GAME_STATE'',state);',
+'    ',
 '  apex.server.process(''SET_GAME_STATE''',
 '                      ,{ x01: state',
 '                        ,pageItems: ''#P3_GAME_STATE''',
 '                       }',
-'                      ,{success: function(pData) {',
-'                                  console.log(''pData'',pData);',
-'                                  socket.emit(''game'',state);',
-'                                 }',
-'                       ',
-'                                , dataType: "text"',
-'                      }',
-'                     );',
-'    ',
-'',
-'});',
+'                      ,{success: function(pData){',
+'                                 console.log(''pData'',pData);',
+'                              }, ',
+'                        dataType: "text", ',
+'                        loadingIndicator: ''#P3_VALUE''',
+'                       }',
+'                      ,{dataType: "text"});',
 '',
 '',
-'console.log(''P3_GAME_STATE'',$v(''P3_GAME_STATE''));',
-''))
-,p_inline_css=>wwv_flow_utilities.join(wwv_flow_t_varchar2(
-'/* hide radio button label */',
-'div.t-Form-labelContainer,col,col-3 {',
-'  display: none;',
-'}'))
+'',
+'});'))
 ,p_step_template=>wwv_flow_api.id(14238122371497809)
 ,p_page_template_options=>'#DEFAULT#'
 ,p_overwrite_navigation_list=>'N'
@@ -8195,7 +8171,7 @@ wwv_flow_api.create_page(
 ,p_cache_mode=>'NOCACHE'
 ,p_help_text=>'No help is available for this page.'
 ,p_last_updated_by=>'ADMIN'
-,p_last_upd_yyyymmddhh24miss=>'20150911124125'
+,p_last_upd_yyyymmddhh24miss=>'20160221164234'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(13617078946208311)
@@ -8228,33 +8204,26 @@ wwv_flow_api.create_page_plug(
 ,p_attribute_03=>'Y'
 );
 wwv_flow_api.create_page_button(
- p_id=>wwv_flow_api.id(14372234859490935)
+ p_id=>wwv_flow_api.id(15493492825710302)
 ,p_button_sequence=>10
 ,p_button_plug_id=>wwv_flow_api.id(14371925576490919)
-,p_button_name=>'SAVE'
-,p_button_action=>'SUBMIT'
-,p_button_template_options=>'#DEFAULT#'
+,p_button_name=>'Start'
+,p_button_action=>'DEFINED_BY_DA'
+,p_button_template_options=>'#DEFAULT#:t-Button--success'
 ,p_button_template_id=>wwv_flow_api.id(14273131907497878)
-,p_button_is_hot=>'Y'
-,p_button_image_alt=>'Save'
-,p_button_position=>'BELOW_BOX'
-,p_button_alignment=>'LEFT'
-,p_button_condition=>'P3_ID'
-,p_button_condition_type=>'ITEM_IS_NOT_NULL'
-,p_database_action=>'UPDATE'
+,p_button_image_alt=>'Start'
+,p_button_position=>'REGION_TEMPLATE_NEXT'
 );
 wwv_flow_api.create_page_button(
- p_id=>wwv_flow_api.id(14372316929490935)
+ p_id=>wwv_flow_api.id(15493555379710303)
 ,p_button_sequence=>20
 ,p_button_plug_id=>wwv_flow_api.id(14371925576490919)
-,p_button_name=>'CANCEL'
-,p_button_action=>'REDIRECT_PAGE'
-,p_button_template_options=>'#DEFAULT#'
+,p_button_name=>'Stop'
+,p_button_action=>'DEFINED_BY_DA'
+,p_button_template_options=>'#DEFAULT#:t-Button--danger'
 ,p_button_template_id=>wwv_flow_api.id(14273131907497878)
-,p_button_image_alt=>'Cancel'
-,p_button_position=>'BELOW_BOX'
-,p_button_alignment=>'LEFT'
-,p_button_redirect_url=>'f?p=&APP_ID.:3:&SESSION.::&DEBUG.:::'
+,p_button_image_alt=>'Stop'
+,p_button_position=>'REGION_TEMPLATE_NEXT'
 );
 wwv_flow_api.create_page_button(
  p_id=>wwv_flow_api.id(13616964078208310)
@@ -8265,7 +8234,7 @@ wwv_flow_api.create_page_button(
 ,p_button_template_options=>'#DEFAULT#'
 ,p_button_template_id=>wwv_flow_api.id(14273131907497878)
 ,p_button_image_alt=>'Log Out'
-,p_button_position=>'BELOW_BOX'
+,p_button_position=>'REGION_TEMPLATE_NEXT'
 ,p_button_redirect_url=>'&LOGOUT_URL.'
 );
 wwv_flow_api.create_page_branch(
@@ -8288,30 +8257,14 @@ wwv_flow_api.create_page_item(
 ,p_attribute_01=>'Y'
 );
 wwv_flow_api.create_page_item(
- p_id=>wwv_flow_api.id(14374336905490974)
-,p_name=>'P3_STATUS'
-,p_item_sequence=>20
-,p_item_plug_id=>wwv_flow_api.id(14371925576490919)
-,p_use_cache_before_default=>'NO'
-,p_source=>'STATUS'
-,p_source_type=>'DB_COLUMN'
-,p_display_as=>'NATIVE_RADIOGROUP'
-,p_lov=>'STATIC:Stop;STOPPED,Start;READY'
-,p_field_template=>wwv_flow_api.id(14272699972497875)
-,p_item_template_options=>'#DEFAULT#:t-Form-fieldContainer--xlarge'
-,p_lov_display_extra=>'NO'
-,p_attribute_01=>'3'
-,p_attribute_02=>'NONE'
-);
-wwv_flow_api.create_page_item(
  p_id=>wwv_flow_api.id(14903100427476449)
 ,p_name=>'P3_GAME_STATE'
 ,p_item_sequence=>10
 ,p_item_plug_id=>wwv_flow_api.id(14371925576490919)
-,p_prompt=>'Game State'
+,p_prompt=>'Game'
 ,p_display_as=>'NATIVE_DISPLAY_ONLY'
 ,p_field_template=>wwv_flow_api.id(14272699972497875)
-,p_item_template_options=>'#DEFAULT#'
+,p_item_template_options=>'t-Form-fieldContainer--xlarge'
 ,p_attribute_01=>'Y'
 ,p_attribute_02=>'VALUE'
 ,p_attribute_04=>'Y'
@@ -8323,6 +8276,14 @@ wwv_flow_api.create_page_computation(
 ,p_computation_point=>'AFTER_HEADER'
 ,p_computation_type=>'STATIC_ASSIGNMENT'
 ,p_computation=>'1'
+);
+wwv_flow_api.create_page_computation(
+ p_id=>wwv_flow_api.id(15499808609477332)
+,p_computation_sequence=>20
+,p_computation_item=>'P3_GAME_STATE'
+,p_computation_point=>'BEFORE_HEADER'
+,p_computation_type=>'QUERY'
+,p_computation=>'SELECT status FROM game where id = 1'
 );
 wwv_flow_api.create_page_da_event(
  p_id=>wwv_flow_api.id(14913560633764514)
@@ -8350,6 +8311,72 @@ wwv_flow_api.create_page_da_action(
 '  htp.p(''error: ''||sqlerrm);',
 'end;'))
 ,p_attribute_03=>'P2_GAME_STATE'
+,p_attribute_04=>'N'
+,p_stop_execution_on_error=>'Y'
+,p_wait_for_result=>'Y'
+);
+wwv_flow_api.create_page_da_event(
+ p_id=>wwv_flow_api.id(15493639216710304)
+,p_name=>'When Stop Clicked'
+,p_event_sequence=>20
+,p_triggering_element_type=>'BUTTON'
+,p_triggering_button_id=>wwv_flow_api.id(15493555379710303)
+,p_bind_type=>'live'
+,p_bind_event_type=>'click'
+);
+wwv_flow_api.create_page_da_action(
+ p_id=>wwv_flow_api.id(15493793492710305)
+,p_event_id=>wwv_flow_api.id(15493639216710304)
+,p_event_result=>'TRUE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'N'
+,p_action=>'NATIVE_JAVASCRIPT_CODE'
+,p_attribute_01=>'socket.emit(''game'',''STOPPED'')'
+);
+wwv_flow_api.create_page_da_action(
+ p_id=>wwv_flow_api.id(15494193777710309)
+,p_event_id=>wwv_flow_api.id(15493639216710304)
+,p_event_result=>'TRUE'
+,p_action_sequence=>20
+,p_execute_on_page_init=>'N'
+,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
+,p_attribute_01=>wwv_flow_utilities.join(wwv_flow_t_varchar2(
+':P3_GAME_STATE := ''STOPPED'';',
+'update game set status = ''STOPPED'' where id = 1;'))
+,p_attribute_03=>'P3_GAME_STATE'
+,p_attribute_04=>'N'
+,p_stop_execution_on_error=>'Y'
+,p_wait_for_result=>'Y'
+);
+wwv_flow_api.create_page_da_event(
+ p_id=>wwv_flow_api.id(15493814815710306)
+,p_name=>'When Start Clicked'
+,p_event_sequence=>30
+,p_triggering_element_type=>'BUTTON'
+,p_triggering_button_id=>wwv_flow_api.id(15493492825710302)
+,p_bind_type=>'bind'
+,p_bind_event_type=>'click'
+);
+wwv_flow_api.create_page_da_action(
+ p_id=>wwv_flow_api.id(15493939879710307)
+,p_event_id=>wwv_flow_api.id(15493814815710306)
+,p_event_result=>'TRUE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'N'
+,p_action=>'NATIVE_JAVASCRIPT_CODE'
+,p_attribute_01=>'socket.emit(''game'',''RUNNING'')'
+);
+wwv_flow_api.create_page_da_action(
+ p_id=>wwv_flow_api.id(15494071723710308)
+,p_event_id=>wwv_flow_api.id(15493814815710306)
+,p_event_result=>'TRUE'
+,p_action_sequence=>20
+,p_execute_on_page_init=>'N'
+,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
+,p_attribute_01=>wwv_flow_utilities.join(wwv_flow_t_varchar2(
+':P3_GAME_STATE := ''RUNNING'';',
+'update game set status = ''RUNNING'' where id = 1;'))
+,p_attribute_03=>'P3_GAME_STATE'
 ,p_attribute_04=>'N'
 ,p_stop_execution_on_error=>'Y'
 ,p_wait_for_result=>'Y'
