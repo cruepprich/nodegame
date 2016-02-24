@@ -1,22 +1,24 @@
-var express = require('express');
-//var favicon = require('serve-favicon');
-var proxy = require( 'http-proxy' ).createProxyServer({});
-var http = require('http');
-//var https = require('https');
+var express       = require('express');
+//var favicon     = require('serve-favicon');
+var proxy         = require( 'http-proxy' ).createProxyServer({});
+var http          = require('http');
+//var https       = require('https');
 
-var app = express();
+var app           = express();
 
-var config = require('./config');
+var config        = require('./config');
 
-var gpio = require('onoff').Gpio;
-var led = new gpio(4,'out');
-var btn2 = new gpio(17,'in', 'both');
-var btn1 = new gpio(18,'in', 'both');
-var connections = 0;
-var state = 'STOPPED'; //game state: READY,RUNING,STOPPED
+var gpio          = require('onoff').Gpio;
+var led           = new gpio(4,'out');
+var btn2          = new gpio(17,'in', 'both');
+var btn1          = new gpio(18,'in', 'both');
+var connections   = 0;
+var state         = 'STOPPED'; //game state: READY,RUNING,STOPPED
 
 var LEDstate; //on,off,blink
 var iv; //blink interval
+
+//silly comment
 
 //Uncomment if you don't want to redirect / and /apex to the new /ords
 if (config.ords.redirectPaths.length > 0){
@@ -61,6 +63,24 @@ function blinkLED(freq) {
 						 }, freq);
 }
 
+function setLED(state) {
+    console.log('setLED',state);
+    if (state == 'RUNNING') {
+      clearInterval(iv); //stop blinking
+      led.writeSync(1); //turn LED on
+    } else if (state == 'STOPPED') {
+      clearInterval(iv); //stop blinking
+      led.writeSync(0); //turn LED off
+    } else if (state == 'READY') {
+      blinkLED(); //blink LED
+    }
+}
+
+function showSocketInfo(socket) {
+  console.log("ip: "+socket.request.connection.remoteAddress);
+  console.log("user-agent: "+socket.request.headers['user-agent']);
+}
+
 
 // app.listen(httpPort);
 server = http.createServer(app).listen(config.web.http.port);
@@ -68,14 +88,32 @@ console.log('listenting on',config.web.http.port);
 
 var io = require('socket.io').listen(server);
 
+
 io.on('connection', function(socket){
   console.log('a user connected. LED is ' + led.readSync());
+  showSocketInfo(socket);
+
 	io.emit('LED',led.readSync());
 
   socket.on('disconnect', function(socket){
     console.log('a user disconnected ...');
+    //showSocketInfo(socket);
+    console.log('socket\n',socket);
   });
 
+  socket.on('game', function(state){
+    //Control game state
+    console.log('Set game state to',state);
+    //Set LED to reflect game state
+    setLED(state);
+    //Send socket back to app as if button were pressed
+    io.emit('button1',state);
+  });
+
+  socket.on('client', function(clientInfo){
+    console.log('Client',clientInfo);
+  })
+  
   socket.on('led', function(state){
 	  LEDstate = state;
     console.log('LED state: ',state);
