@@ -15,10 +15,16 @@ var btn1          = new gpio(18,'in', 'both');
 var connections   = 0;
 var state         = 'STOPPED'; //game state: READY,RUNING,STOPPED
 
+
+var blueTeam      = 0;
+var redTeam       = 0;
+
 var LEDstate; //on,off,blink
 var iv; //blink interval
 
-//silly comment
+
+
+
 
 //Uncomment if you don't want to redirect / and /apex to the new /ords
 if (config.ords.redirectPaths.length > 0){
@@ -85,6 +91,10 @@ function showSocketInfo(socket) {
 // app.listen(httpPort);
 server = http.createServer(app).listen(config.web.http.port);
 console.log('listenting on',config.web.http.port);
+console.log('Requires VM3 with Oracle/Apex running');
+console.log('URL: http://carpi:3000/ords/f?p=163');
+console.log('DEV: http://vm3:8080/ords/f?p=4500');
+console.log('Workspce rpi, admin');
 
 var io = require('socket.io').listen(server);
 
@@ -114,6 +124,18 @@ io.on('connection', function(socket){
     console.log('Client',clientInfo);
   })
   
+
+  socket.on('team', function (team) {
+    if (team == 'BLUE') {
+      blueTeam++;
+    } else if (team == 'RED') {
+      redTeam++;
+    }
+
+    console.log(team+' player joined.');
+    console.log('Blue: ',blueTeam,'Red',redTeam);
+
+  })
   socket.on('led', function(state){
 	  LEDstate = state;
     console.log('LED state: ',state);
