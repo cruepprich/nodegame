@@ -1,3 +1,19 @@
+Skip to content
+This repository
+Search
+Pull requests
+Issues
+Gist
+ @cruepprich
+ Unwatch 1
+  Star 0
+ Fork 0 cruepprich/nodegame
+ Code  Issues 0  Pull requests 0  Wiki  Pulse  Graphs  Settings
+Branch: connect_hardwa… Find file Copy pathnodegame/game.js
+6dd0189  13 days ago
+@cruepprich cruepprich Added console log messages.
+1 contributor
+RawBlameHistory     209 lines (168 sloc)  5.41 KB
 var express       = require('express');
 //var favicon     = require('serve-favicon');
 var proxy         = require( 'http-proxy' ).createProxyServer({});
@@ -61,12 +77,11 @@ app.use(function(req, res, next){
 
 // make LED blink
 function blinkLED(freq) {
-        freq = (freq == undefined ? 200 : freq);
-
-				iv = setInterval(function() {
-									onoff = led.readSync() ^ 1;
-									led.writeSync( onoff );
-						 }, freq);
+  freq = (freq == undefined ? 200 : freq);
+  iv = setInterval(function() {
+    onoff = led.readSync() ^ 1;
+    led.writeSync( onoff );
+  }, freq);
 }
 
 function setLED(state) {
@@ -206,3 +221,5 @@ io.on('connection', function(socket){
 			io.emit('LED',value);
 		}
   });
+Status API Training Shop Blog About
+© 2016 GitHub, Inc. Terms Privacy Security Contact Help
