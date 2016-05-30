@@ -91,7 +91,7 @@ function showSocketInfo(socket) {
 server = http.createServer(app).listen(config.web.http.port);
 console.log('listenting on',config.web.http.port);
 console.log('Requires VM3 with Oracle/Apex running');
-console.log('URL: http://carpi:3000/ords/f?p=163');
+console.log('URL: http://[host]:3000/ords/f?p=163');
 console.log('DEV: http://vm3:8080/ords/f?p=4500');
 console.log('Workspce rpi, admin');
 
