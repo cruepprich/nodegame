@@ -110,6 +110,11 @@ io.on('connection', function(socket){
     console.log('socket\n',socket);
   });
 
+  socket.on('pageLoaded', function(socket){
+    console.log('a page loaded'); 
+    io.emit('gameState',state);
+  });
+
   socket.on('game', function(state){
     //Control game state
     console.log('Set game state to',state);
