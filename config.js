@@ -28,7 +28,7 @@ config.static = {}
 config.static.path = '/public'; //URL path
 // Old (pre #13) config.static.directory = __dirname + '/public'; //Filesystem directory
 //config.static.directory = process.env.STATIC_DIR || '/var/www/public'; //Filesystem directory
-config.static.directory = process.env.STATIC_DIR || '/var/www/public'; //Filesystem directory
+config.static.directory = process.env.STATIC_DIR || './apex_static'; //Filesystem directory
 
 
 

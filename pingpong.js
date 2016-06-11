@@ -1,5 +1,5 @@
 var express = require('express');
-var favicon = require('serve-favicon');
+//var favicon = require('serve-favicon');
 var proxy = require( 'http-proxy' ).createProxyServer({});
 var http = require('http');
 //var https = require('https');
@@ -45,6 +45,27 @@ app.get('/', function(req, res, next){
 
 
 // app.listen(httpPort);
-http.createServer(app).listen(config.web.http.port);
+server = http.createServer(app).listen(config.web.http.port);
+console.log('Listening on '+config.web.http.port);
 //Enable once SSL cert defined
 // https.createServer(options, app).listen(config.ports.https);
+
+var io = require('socket.io').listen(server);
+
+io.on('connection', function(socket){
+
+  socket.on('disconnect', function(socket){
+    console.log('a user disconnected ...');
+    //showSocketInfo(socket);
+    console.log('socket\n',socket);
+  });
+
+  socket.on('ping', function(msg){
+    //Show message from APEX
+    console.log('Ping',msg);
+
+    //Send message back to APEX
+    io.emit('pong','Hello from node.js.');
+  });
+  
+});
